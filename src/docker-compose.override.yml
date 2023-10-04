@@ -23,7 +23,7 @@ services:
       - POSTGRES_DB=DiscountDb
     restart: always
     ports:
-      - "5435:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
@@ -74,7 +74,7 @@ services:
     container_name: discount.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5435;Database=DiscountDb;User Id=admin;Password=12345678x@X"
+      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=12345678x@X"
     depends_on:
       - discountdb
     ports:
