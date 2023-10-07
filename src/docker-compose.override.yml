@@ -47,6 +47,13 @@ services:
     volumes:
       - pgadmin_data:/root/.pgadmindocker 
 
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+
   portainer:
     container_name: portainer
     restart: always
@@ -100,4 +107,15 @@ services:
       - discountdb
     ports:
       - "8003:80"
+
+
+  ordering.api:
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=12345678x@X;" 
+    depends_on:
+      - orderdb
+    ports:
+      - "8004:80"
 
