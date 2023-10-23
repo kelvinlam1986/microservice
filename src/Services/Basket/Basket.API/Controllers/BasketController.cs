@@ -45,8 +45,8 @@ namespace Basket.API.Controllers
         {
             foreach (var item in basket.Items)
             {
-                var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
-                item.Price -= coupon.Amount;
+               // var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
+               // item.Price -= coupon.Amount;
             }
 
             return Ok(await _repository.UpdateBasket(basket));
@@ -73,7 +73,7 @@ namespace Basket.API.Controllers
                 return BadRequest();
             }
 
-            var eventMessage = _mapper.Map<BasketCheckoutEvent>(basket);
+            var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
             eventMessage.TotalPrice = basket.TotalPrice;
 
             await _publishEndpoint.Publish(eventMessage);
