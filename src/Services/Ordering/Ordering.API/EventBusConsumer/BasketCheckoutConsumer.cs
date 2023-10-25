@@ -10,12 +10,12 @@ namespace Ordering.API.EventBusConsumer
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<BasketCheckoutConsumer> _logger;
 
         public BasketCheckoutConsumer(
             IMediator mediator,
             IMapper mapper,
-            ILogger logger)
+            ILogger<BasketCheckoutConsumer> logger)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));    
@@ -27,7 +27,7 @@ namespace Ordering.API.EventBusConsumer
             var command = _mapper.Map<CheckoutOrderCommand>(context.Message);
             var result = await _mediator.Send(command);
 
-            _logger.LogInformation("BasketCheckoutEvent consume successfully. Create Order Id: {newOrderId}", result)
+            _logger.LogInformation("BasketCheckoutEvent consume successfully. Create Order Id: {newOrderId}", result);
         }
     }
 }
