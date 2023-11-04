@@ -40,7 +40,7 @@ namespace AspnetRunBasics
                 return Page();
             }
 
-            Order.UserName = "test";
+            Order.UserName = username;
             Order.TotalPrice = Cart.TotalPrice;
 
             await _basketService.CheckoutBasket(Order);
