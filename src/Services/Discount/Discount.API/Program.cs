@@ -1,6 +1,8 @@
+using Common.Logging;
 using Discount.API.Extensions;
 using Discount.API.Repositories;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace Discount.API
 {
@@ -9,6 +11,7 @@ namespace Discount.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Host.UseSerilog(SeriLogger.Configure);
 
             // Add services to the container.
             builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();

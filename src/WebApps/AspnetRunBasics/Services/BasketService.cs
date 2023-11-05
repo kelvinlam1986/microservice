@@ -1,5 +1,6 @@
 ﻿using AspnetRunBasics.Extensions;
 using AspnetRunBasics.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,8 +10,8 @@ namespace AspnetRunBasics.Services
     public class BasketService : IBasketService
     {
         private readonly HttpClient _client;
-
-        public BasketService(HttpClient client)
+        public BasketService(
+            HttpClient client)
         {
             _client = client;
         }
