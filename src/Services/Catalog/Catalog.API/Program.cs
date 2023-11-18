@@ -39,16 +39,15 @@ builder.Services.AddHealthChecks()
                 "Catalog MongoDb Health",
                 Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Degraded);
 
-builder.Services.AddOpenTelemetryTracing((builder) =>
+builder.Services.AddOpenTelemetryTracing((b) =>
 {
-    builder
-        .AddAspNetCoreInstrumentation()
+    b.AddAspNetCoreInstrumentation()
         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Catalog.API"))
         .AddHttpClientInstrumentation()
         .AddSource(nameof(CatalogController))
         .AddJaegerExporter(options =>
         {
-            options.AgentHost = "localhost";
+            options.AgentHost = builder.Configuration["TraceHost"];
             options.AgentPort = 6831;
             options.ExportProcessorType = ExportProcessorType.Simple;
         })
