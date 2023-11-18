@@ -77,12 +77,23 @@ services:
     image: docker.elastic.co/kibana/kibana:7.9.2
   
 
+  webstatus:
+    image: ${DOCKER_REGISTRY-}webstatus
+    build:
+      context: .
+      dockerfile: WebApps/WebStatus/Dockerfile
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.12
+
 volumes:
   mongo_data:
   portainer-data:
   postgres_data:
   pgadmin_data:
   elasticsearch-data:
+  jaeger-data:
+
 
 
 

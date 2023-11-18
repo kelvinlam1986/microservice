@@ -23,6 +23,7 @@ namespace Common.Logging
                        )
                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName)
                        .Enrich.WithProperty("Application", ctx.HostingEnvironment.ApplicationName)
+                       .Enrich.With<LogEnricher>()
                        .ReadFrom.Configuration(ctx.Configuration);
             };
             

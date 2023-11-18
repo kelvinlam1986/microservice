@@ -1,9 +1,11 @@
 using Common.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System;
+using System.Diagnostics;
 
 namespace AspnetRunBasics
 {
@@ -11,11 +13,19 @@ namespace AspnetRunBasics
     {
         public static void Main(string[] args)
         {
-           CreateHostBuilder(args).Build().Run();
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                 .ConfigureLogging(loggingBuilder =>
+                 {
+                     loggingBuilder.Configure(options =>
+                     {
+                         options.ActivityTrackingOptions = ActivityTrackingOptions.TraceId | ActivityTrackingOptions.SpanId;
+                     });
+                 })
                 .UseSerilog(SeriLogger.Configure)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
