@@ -1,3 +1,4 @@
+using AspnetRunBasics.Helpers;
 using AspnetRunBasics.Services;
 using Common.Logging;
 using Microsoft.AspNetCore.Builder;
@@ -25,17 +26,23 @@ namespace AspnetRunBasics
             services.AddHttpClient<ICatalogService, CatalogService>(c =>
             {
                 c.BaseAddress = new Uri(Configuration["ApiSettings:GatewayAddress"]);
-            }).AddHttpMessageHandler<LoggingDelegatingHandler>();
+            }).AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .AddPolicyHandler(PollyHelper.GetRetryPolicy())
+            .AddPolicyHandler(PollyHelper.GetCircuitBreakerPolicy());
 
             services.AddHttpClient<IBasketService, BasketService>(c =>
             {
                 c.BaseAddress = new Uri(Configuration["ApiSettings:GatewayAddress"]);
-            }).AddHttpMessageHandler<LoggingDelegatingHandler>();
+            }).AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .AddPolicyHandler(PollyHelper.GetRetryPolicy())
+            .AddPolicyHandler(PollyHelper.GetCircuitBreakerPolicy());
 
             services.AddHttpClient<IOrderService, OrderService>(c =>
             {
                 c.BaseAddress = new Uri(Configuration["ApiSettings:GatewayAddress"]);
-            }).AddHttpMessageHandler<LoggingDelegatingHandler>();
+            }).AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .AddPolicyHandler(PollyHelper.GetRetryPolicy())
+            .AddPolicyHandler(PollyHelper.GetCircuitBreakerPolicy());
 
             services.AddRazorPages();
         }

@@ -1,6 +1,7 @@
 using Shopping.Aggregator.Services;
 using Serilog;
 using Common.Logging;
+using Shopping.Aggregator.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog(SeriLogger.Configure);
@@ -11,17 +12,25 @@ builder.Services.AddTransient<LoggingDelegatingHandler>();
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CatalogUrl"]);
-}).AddHttpMessageHandler<LoggingDelegatingHandler>();
+})
+.AddHttpMessageHandler<LoggingDelegatingHandler>()
+.AddPolicyHandler(PollyHelper.GetRetryPolicy())
+.AddPolicyHandler(PollyHelper.GetCircuitBreakerPolicy());
+
 
 builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BasketUrl"]);
-}).AddHttpMessageHandler<LoggingDelegatingHandler>();
+}).AddHttpMessageHandler<LoggingDelegatingHandler>()
+.AddPolicyHandler(PollyHelper.GetRetryPolicy())
+.AddPolicyHandler(PollyHelper.GetCircuitBreakerPolicy());
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiSettings:OrderingUrl"]);
-}).AddHttpMessageHandler<LoggingDelegatingHandler>();
+}).AddHttpMessageHandler<LoggingDelegatingHandler>()
+.AddPolicyHandler(PollyHelper.GetRetryPolicy())
+.AddPolicyHandler(PollyHelper.GetCircuitBreakerPolicy());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
